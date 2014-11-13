@@ -6,7 +6,7 @@ import java.awt.Graphics;
 public class LinhaFluxo extends ElementoFluxograma {
 	private static final long serialVersionUID = -192737480350883807L;
 
-	private ElementoFluxograma figuraInicial, figuraFinal;
+	private ElementoFluxograma figuraInicial = null, figuraFinal = null;
 	private int xFinal, yFinal;
 
 	public LinhaFluxo(ElementoFluxograma figuraInicial) {
@@ -14,16 +14,18 @@ public class LinhaFluxo extends ElementoFluxograma {
 			0,0,0,0,Color.BLACK
 		);
 
-		figuraInicial.addLinhaFluxo(this);
-		this.figuraInicial = figuraInicial;
-		this.figuraFinal = new ElementoFluxograma(figuraInicial.getX(), figuraInicial.getY()+100,
-				figuraInicial.getLargura(), 0, Color.black);
-		this.setTexto(" ");
+
+		if (figuraInicial.addLinhaFluxo(this)) {
+			this.figuraInicial = figuraInicial;
+			this.figuraFinal = null;
+			this.setTexto(" ");
+		}
 	}
 
 	public void setFiguraFinal(ElementoFluxograma figuraFinal) {
-		figuraFinal.addLinhaFluxo(this);
-		this.figuraFinal = figuraFinal;
+		if (figuraFinal.addLinhaFluxo(this)) {
+			this.figuraFinal = figuraFinal;
+		}
 	}
 
 	public ElementoFluxograma getFiguraInicial() {
@@ -39,10 +41,18 @@ public class LinhaFluxo extends ElementoFluxograma {
 		this.x = figuraInicial.getX()+figuraInicial.getLargura()/2;
 		this.y = figuraInicial.getY()+figuraInicial.getAltura();
 		this.largura = 10;
-		this.altura = figuraFinal.getY()-figuraInicial.getY()-figuraInicial.altura;
 
-		this.xFinal = figuraFinal.getX()+figuraFinal.getLargura()/2;
-		this.yFinal = figuraFinal.getY();
+		// caso possua figura final, utiliza as coordenadas da meso
+		if (this.figuraFinal != null) {
+			this.altura = figuraFinal.getY()-figuraInicial.getY()-figuraInicial.altura;
+
+			this.xFinal = figuraFinal.getX()+figuraFinal.getLargura()/2;
+			this.yFinal = figuraFinal.getY();
+		} else { // caso contrário cria ponto final temporario
+			this.altura = 50;
+			this.xFinal = this.x;
+			this.yFinal = this.y+50;
+		}
 
 		g.setColor(this.cor);
 		g.drawLine(this.x, this.y, this.xFinal, yFinal-20);

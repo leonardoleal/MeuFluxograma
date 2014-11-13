@@ -7,9 +7,6 @@ import java.awt.GridBagLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
-import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
-import java.awt.event.MouseMotionListener;
 import java.awt.image.BufferedImage;
 import java.io.EOFException;
 import java.io.File;
@@ -34,13 +31,9 @@ import javax.swing.KeyStroke;
 import javax.swing.SwingUtilities;
 
 import com.senac.fluxograma.FiltroSelecaoArquivo.tipoArquivo;
-import com.senac.fluxograma.elemento.Decisao;
 import com.senac.fluxograma.elemento.ElementoFluxograma;
 import com.senac.fluxograma.elemento.Figura;
-import com.senac.fluxograma.elemento.Fluxograma;
 import com.senac.fluxograma.elemento.InicioFim;
-import com.senac.fluxograma.elemento.LinhaFluxo;
-import com.senac.fluxograma.elemento.Processamento;
 import com.senac.fluxograma.elemento.Subrotina;
 
 class FluxogramaFrame extends JFrame {
@@ -76,6 +69,46 @@ class FluxogramaFrame extends JFrame {
         this.setBounds(100, 100, 700, 700);
         this.setVisible(true);
         this.localDefault = new File(System.getProperty("user.home")+"fluxogramas");
+    }
+    
+    public ButtonGroup getGrupoBotoesBarraFerramenta() {
+		return grupoBotoesBarraFerramenta;
+	}
+
+	public JToggleButton getBotaoInicio() {
+		return botaoInicio;
+	}
+
+	public JToggleButton getBotaoFim() {
+		return botaoFim;
+	}
+
+	public JToggleButton getBotaoProcessamento() {
+		return botaoProcessamento;
+	}
+
+	public JToggleButton getBotaoDecisao() {
+		return botaoDecisao;
+	}
+
+	public JToggleButton getBotaoSubrotina() {
+		return botaoSubrotina;
+	}
+
+	public JToggleButton getBotaoLinhaFluxo() {
+		return botaoLinhaFluxo;
+	}
+
+	public JPopupMenu getMenuPopup() {
+		return menuPopup;
+	}
+
+	public JMenuItem getPopupMenuItemTexto() {
+		return popupMenuItemTexto;
+	}
+
+	public PainelEstruturas getPainelEstruturas() {
+    	return painelEstruturas;
     }
 
     private void iniciaBarraMenus() {
@@ -215,13 +248,10 @@ class FluxogramaFrame extends JFrame {
 	}
 
     private void iniciaComponentes() {
-    	TratadorMouse tratadorMouse = new TratadorMouse();
+//    	TratadorMouse tratadorMouse = new TratadorMouse();
 
         painelPrincipal = new PainelPrincipal(this);    	
         painelEstruturas = new PainelEstruturas(this);
-
-    	painelEstruturas.addMouseListener(tratadorMouse);
-    	painelEstruturas.addMouseMotionListener(tratadorMouse);
 
         gbc.fill = GridBagConstraints.VERTICAL;
         gbc.ipadx = 150;
@@ -230,10 +260,7 @@ class FluxogramaFrame extends JFrame {
         gbc.gridx = 0;
         gbc.gridwidth = 1;
         gbc.gridy = 1;
-        this.add(painelEstruturas, gbc);
-
-        painelPrincipal.addMouseListener(tratadorMouse);
-        painelPrincipal.addMouseMotionListener(tratadorMouse);
+        this.add(getPainelEstruturas(), gbc);
 
         gbc.fill = GridBagConstraints.BOTH;
         gbc.weighty = 1.0;
@@ -403,7 +430,7 @@ class FluxogramaFrame extends JFrame {
 				}
 			} else if (e.getSource().equals(menuItemNovo)) {
 				painelPrincipal.limpar();
-				painelEstruturas.limpar();
+				getPainelEstruturas().limpar();
 			} else if (e.getSource().equals(menuItemSair)) {
 				FluxogramaFrame.this.dispose();
 			} else if (e.getSource().equals(popupMenuItemLimpar)
@@ -416,7 +443,7 @@ class FluxogramaFrame extends JFrame {
 					FluxogramaFrame.this.mensagemEstado("Selecione um item para remover.");
 				} else {
 					if (painelPrincipal.getFiguraSelecionada() instanceof Subrotina) {
-						painelEstruturas.removeFluxograma(
+						getPainelEstruturas().removeFluxograma(
 								((Subrotina) painelPrincipal.getFiguraSelecionada()).getSubrotina()
 						);
 					}
@@ -442,7 +469,7 @@ class FluxogramaFrame extends JFrame {
 						painelPrincipal.repaint();
 
 						if (painelPrincipal.getFiguraSelecionada() instanceof Subrotina) {
-							painelEstruturas.editaFluxograma(
+							getPainelEstruturas().editaFluxograma(
 									((Subrotina) painelPrincipal.getFiguraSelecionada()).getSubrotina()
 							);
 						}
@@ -450,87 +477,5 @@ class FluxogramaFrame extends JFrame {
 				}
 			}
 		}
-    }
-
-    private class TratadorMouse implements MouseListener, MouseMotionListener {
-    	LinhaFluxo linhaFluxoAtual;
-
-        @Override
-        public void mousePressed(MouseEvent e) {
-        	painelPrincipal.mostraSelecao(e.getPoint());
-        }
-
-        @Override
-        public void mouseDragged(MouseEvent e) {
-    		painelPrincipal.moverFigura(e.getPoint());
-        }  
-
-        @Override
-        public void mouseReleased(MouseEvent e) {
-        	if (e.getButton() == MouseEvent.BUTTON1) {
-        		int x = e.getX();
-        		int y = e.getY();
-
-				painelEstruturas.addFluxograma(painelPrincipal.getFluxograma());
-        		
-				if (! painelPrincipal.hasSelection()) {
-					if(botaoInicio.isSelected()) {
-						painelPrincipal.adicionaFigura(new InicioFim(x, y, InicioFim.tipoElemento.INICIO));
-
-					} else if(botaoFim.isSelected()) {
-						painelPrincipal.adicionaFigura(new InicioFim(x, y, InicioFim.tipoElemento.FIM));
-
-					} else if(botaoProcessamento.isSelected()) {
-						painelPrincipal.adicionaFigura(new Processamento(x, y));
-
-					} else if(botaoDecisao.isSelected()) {
-						painelPrincipal.adicionaFigura(new Decisao(x, y));
-
-					} else if(botaoSubrotina.isSelected()) {
-						Subrotina subrotina = new Subrotina(x, y);
-						subrotina.setSubrotina(new Fluxograma());
-
-						painelPrincipal.adicionaFigura(subrotina);
-						painelEstruturas.addFluxograma(subrotina.getSubrotina());
-					}
-					painelEstruturas.addFluxograma(painelPrincipal.getFluxograma());
-
-				} else if(botaoLinhaFluxo.isSelected()) {
-					ElementoFluxograma selecionado = (ElementoFluxograma) painelPrincipal.getFiguraSelecionada();
-					if (! (selecionado instanceof LinhaFluxo)) {
-						if (linhaFluxoAtual == null) {
-							linhaFluxoAtual = new LinhaFluxo(selecionado);
-							painelPrincipal.adicionaFigura(linhaFluxoAtual);
-						} else {
-							linhaFluxoAtual.setFiguraFinal(selecionado);
-							painelPrincipal.repaint();
-							grupoBotoesBarraFerramenta.clearSelection();
-							linhaFluxoAtual = null;
-						}
-					}
-				}
-        	}
-        }
-
-        
-
-		@Override
-		public void mouseMoved(MouseEvent e) {}
-
-		@Override
-		public void mouseClicked(MouseEvent e) {
-			if (e.getButton() == MouseEvent.BUTTON3) { 
-                if(e.getComponent() instanceof PainelPrincipal)
-                    menuPopup.show(e.getComponent(), e.getX(), e.getY()); 
-            } else if (e.getClickCount() == 2) {
-            	popupMenuItemTexto.doClick();
-			}
-		}
-
-		@Override
-		public void mouseEntered(MouseEvent e) {}
-
-		@Override
-		public void mouseExited(MouseEvent e) {}
     }
 }

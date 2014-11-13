@@ -34,6 +34,17 @@ public class Fluxograma extends ArrayList<Figura> implements Serializable {
 	}
 
 	@Override
+	public boolean add(Figura figura) {
+		// Verifica se já existe inicio e fim no fluxograma.
+		if (figura instanceof InicioFim) {
+			if (this.contains(figura))
+				return false;
+		}
+
+		return super.add(figura);
+	};
+
+	@Override
 	public String toString() {
 		return nome;
 	}

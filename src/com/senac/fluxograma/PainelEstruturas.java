@@ -2,7 +2,6 @@ package com.senac.fluxograma;
 
 import java.awt.BorderLayout;
 import java.awt.Rectangle;
-import java.awt.event.MouseListener;
 import java.util.EventListener;
 
 import javax.swing.DefaultListModel;
@@ -95,7 +94,8 @@ public class PainelEstruturas extends JPanel {
 		modelFluxograma.clear();
 	}
 
-	public class TratadorLista implements EventListener {
+	// TODO 
+	private class TratadorLista implements EventListener {
 		
 	}
 }

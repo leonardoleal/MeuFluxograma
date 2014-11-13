@@ -57,7 +57,7 @@ public class ElementoFluxograma extends Figura {
 		return linhasFluxo.get(indice);
 	}
 
-	public void addLinhaFluxo(LinhaFluxo linhaFluxo) {
-		this.linhasFluxo.add(linhaFluxo);
+	public boolean addLinhaFluxo(LinhaFluxo linhaFluxo) {
+		return this.linhasFluxo.add(linhaFluxo);
 	}
 }
