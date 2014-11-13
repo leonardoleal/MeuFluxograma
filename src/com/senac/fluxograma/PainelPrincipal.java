@@ -235,10 +235,10 @@ public class PainelPrincipal extends JPanel {
 
 					} else if(frame.getBotaoSubrotina().isSelected()) {
 						Subrotina subrotina = new Subrotina(x, y);
-						subrotina.setSubrotina(new Fluxograma());
+						subrotina.setSubrotinaFluxo(new Fluxograma());
 
 						PainelPrincipal.this.adicionaFigura(subrotina);
-						frame.getPainelEstruturas().addFluxograma(subrotina.getSubrotina());
+						frame.getPainelEstruturas().addFluxograma(subrotina.getSubrotinaFluxo());
 					}
 					frame.getPainelEstruturas().addFluxograma(PainelPrincipal.this.getFluxograma());
 
@@ -274,8 +274,6 @@ public class PainelPrincipal extends JPanel {
         	}
         }
 
-        
-
 		@Override
 		public void mouseMoved(MouseEvent e) {}
 
@@ -285,7 +283,17 @@ public class PainelPrincipal extends JPanel {
                 if(e.getComponent() instanceof PainelPrincipal)
                 	frame.getMenuPopup().show(e.getComponent(), e.getX(), e.getY()); 
             } else if (e.getClickCount() == 2) {
-            	frame.getPopupMenuItemTexto().doClick();
+            	// se não for subrotina, edita o texto
+            	if (! (PainelPrincipal.this.getFiguraSelecionada()
+            			instanceof Subrotina)
+            	) {
+            		frame.getPopupMenuItemTexto().doClick();
+				} else { // exibe o fluxograma da subrotina
+					PainelPrincipal.this.setFluxograma(
+							((Subrotina) PainelPrincipal.this.
+							getFiguraSelecionada()).getSubrotinaFluxo()
+					);
+				}
 			}
 		}
 

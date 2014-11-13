@@ -25,12 +25,12 @@ public class Subrotina extends Processamento {
 	 	this.subrotinaFluxo.setNome(texto);
 	}
 
-	public Fluxograma getSubrotina() {
+	public Fluxograma getSubrotinaFluxo() {
 		return subrotinaFluxo;
 	}
 
-	public void setSubrotina(Fluxograma subrotina) {
-		subrotina.setNome(this.getTexto());
-		this.subrotinaFluxo = subrotina;
+	public void setSubrotinaFluxo(Fluxograma fluxograma) {
+		fluxograma.setNome(this.getTexto());
+		this.subrotinaFluxo = fluxograma;
 	}
 }

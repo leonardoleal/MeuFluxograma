@@ -2,17 +2,15 @@ package com.senac.fluxograma;
 
 import java.awt.BorderLayout;
 import java.awt.Rectangle;
-import java.util.EventListener;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 
 import javax.swing.DefaultListModel;
-import javax.swing.JFrame;
 import javax.swing.JList;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.ListSelectionModel;
-import javax.swing.event.ListSelectionEvent;
-import javax.swing.event.ListSelectionListener;
 
 import com.senac.fluxograma.elemento.Fluxograma;
 
@@ -21,7 +19,7 @@ public class PainelEstruturas extends JPanel {
 
 	private DefaultListModel<Fluxograma> modelFluxograma;
 	private JList<Fluxograma> listaFluxogramas;
-	private JFrame frame;
+	private FluxogramaFrame frame;
     
     public PainelEstruturas(FluxogramaFrame fluxogramaFrame) {
     	super(new BorderLayout());
@@ -35,22 +33,14 @@ public class PainelEstruturas extends JPanel {
 	private void iniciaComponentes() {
 		DefaultListModel<Fluxograma> modelFluxograma = new DefaultListModel<Fluxograma>();
 
-		TratadorLista tratadorLista = new TratadorLista();
+		TratadorMouse tratadorMouse = new TratadorMouse();
 
         listaFluxogramas = new JList<Fluxograma>();
         listaFluxogramas.setModel(modelFluxograma);
+        listaFluxogramas.addMouseListener(tratadorMouse);
         listaFluxogramas.scrollRectToVisible(new Rectangle());
         listaFluxogramas.setLayoutOrientation(JList.VERTICAL);
         listaFluxogramas.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-        listaFluxogramas.getSelectionModel().addListSelectionListener(new ListSelectionListener() {
-
-            @Override
-            public void valueChanged(ListSelectionEvent e) {
-                if (listaFluxogramas.getSelectedIndex() >= 0) {
-                	// carregar fluxograma na tela desenho
-                }
-            }
-        });
 
 		JScrollPane listaScroller = new JScrollPane(listaFluxogramas);
 		listaScroller.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
@@ -61,8 +51,8 @@ public class PainelEstruturas extends JPanel {
 		return (Fluxograma[]) modelFluxograma.toArray();
 	}
 
-	public Fluxograma getFluxograma(int indice) {
-		return modelFluxograma.get(indice);
+	public Fluxograma getFluxogramaSelecionado() {
+		return listaFluxogramas.getSelectedValue();
 	}
 
 	public void addFluxograma(Fluxograma fluxograma) {
@@ -94,8 +84,30 @@ public class PainelEstruturas extends JPanel {
 		modelFluxograma.clear();
 	}
 
-	// TODO 
-	private class TratadorLista implements EventListener {
+	private class TratadorMouse implements MouseListener {
+
+		@Override
+		public void mouseClicked(MouseEvent e) {
+			if (e.getClickCount() == 2) {
+				// exibe o fluxograma selecionado
+				frame.getPainelPrincipal().setFluxograma(
+						PainelEstruturas.this.
+						getFluxogramaSelecionado()
+				);
+			}
+		}
+
+		@Override
+		public void mouseEntered(MouseEvent arg0) {}
+
+		@Override
+		public void mouseExited(MouseEvent arg0) {}
+
+		@Override
+		public void mousePressed(MouseEvent arg0) {}
+
+		@Override
+		public void mouseReleased(MouseEvent arg0) {}
 		
 	}
 }

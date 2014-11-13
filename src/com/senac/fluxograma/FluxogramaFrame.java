@@ -111,6 +111,10 @@ class FluxogramaFrame extends JFrame {
     	return painelEstruturas;
     }
 
+	public PainelPrincipal getPainelPrincipal() {
+    	return painelPrincipal;
+    }
+
     private void iniciaBarraMenus() {
         JMenuBar barraMenu = new JMenuBar();
 
@@ -444,7 +448,7 @@ class FluxogramaFrame extends JFrame {
 				} else {
 					if (painelPrincipal.getFiguraSelecionada() instanceof Subrotina) {
 						getPainelEstruturas().removeFluxograma(
-								((Subrotina) painelPrincipal.getFiguraSelecionada()).getSubrotina()
+								((Subrotina) painelPrincipal.getFiguraSelecionada()).getSubrotinaFluxo()
 						);
 					}
 					painelPrincipal.removerSelecionado();
@@ -470,7 +474,7 @@ class FluxogramaFrame extends JFrame {
 
 						if (painelPrincipal.getFiguraSelecionada() instanceof Subrotina) {
 							getPainelEstruturas().editaFluxograma(
-									((Subrotina) painelPrincipal.getFiguraSelecionada()).getSubrotina()
+									((Subrotina) painelPrincipal.getFiguraSelecionada()).getSubrotinaFluxo()
 							);
 						}
 					}
