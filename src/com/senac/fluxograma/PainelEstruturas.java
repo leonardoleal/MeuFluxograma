@@ -7,7 +7,6 @@ import java.awt.event.MouseListener;
 
 import javax.swing.DefaultListModel;
 import javax.swing.JList;
-import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.ListSelectionModel;
@@ -72,9 +71,7 @@ public class PainelEstruturas extends JPanel {
     }
 
     public void removeFluxograma(Fluxograma fluxograma) {
-		JOptionPane.showMessageDialog(null, "remover");
 		if (modelFluxograma.contains(fluxograma)) {
-			JOptionPane.showMessageDialog(null, "remove");
 	        modelFluxograma.removeElement(fluxograma);
 		}
 	}
