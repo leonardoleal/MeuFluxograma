@@ -61,7 +61,6 @@ public class PainelEstruturas extends JPanel {
 
 		if (!modelFluxograma.contains(fluxograma)) {
 	        modelFluxograma.addElement(fluxograma);
-	        listaFluxogramas.repaint();
 	        frame.getPainelPrincipal().setFluxograma(fluxograma);
 		} else {
 			int indice = modelFluxograma.indexOf(fluxograma);

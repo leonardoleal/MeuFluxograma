@@ -46,6 +46,10 @@ public class PainelPrincipal extends JPanel {
     public void setFluxograma(Fluxograma fluxograma) {
 		limpaSelecao();
 		this.fluxograma = fluxograma;
+
+		String nomeJanela = frame.getTitle().split("[ >]")[0];
+		frame.setTitle(nomeJanela + " > " + fluxograma.getNome());
+
 		repaint();
 	}
 
@@ -241,6 +245,7 @@ public class PainelPrincipal extends JPanel {
 						PainelPrincipal.this.adicionaFigura(subrotina);
 						frame.getPainelEstruturas().addFluxograma(subrotina.getSubrotinaFluxo());
 					}
+					// atualiza o fluxograma no painel estruturas
 					frame.getPainelEstruturas().addFluxograma(PainelPrincipal.this.getFluxograma());
 
 				} else if(frame.getBotaoLinhaFluxo().isSelected()) {

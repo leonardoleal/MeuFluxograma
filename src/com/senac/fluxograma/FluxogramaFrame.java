@@ -1,7 +1,6 @@
 package com.senac.fluxograma;
 
 import java.awt.Color;
-import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.GridBagConstraints;
@@ -20,7 +19,6 @@ import java.io.ObjectOutputStream;
 import javax.imageio.ImageIO;
 import javax.swing.Box;
 import javax.swing.ButtonGroup;
-import javax.swing.Icon;
 import javax.swing.ImageIcon;
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
@@ -456,6 +454,8 @@ class FluxogramaFrame extends JFrame {
 								FileInputStream fis = new FileInputStream(arquivoDialog.getSelectedFile().getAbsolutePath());
 								ObjectInputStream ois = new ObjectInputStream(fis);
 
+								FluxogramaFrame.this.setTitle(arquivoDialog.getSelectedFile().getName());
+
 								painelPrincipal.limpar();
 								Fluxograma fluxo = (Fluxograma) ois.readObject();
 
@@ -494,7 +494,6 @@ class FluxogramaFrame extends JFrame {
 					}
 				} catch (EOFException e1) {
 					FluxogramaFrame.this.mensagemEstado("Arquivo carregado com sucesso.");
-					FluxogramaFrame.this.setTitle(arquivoDialog.getSelectedFile().getName());
 				} catch (Exception e1) {
 					e1.printStackTrace();
 					FluxogramaFrame.this.mensagemEstado("Erro na manipulação de arquivo.");
