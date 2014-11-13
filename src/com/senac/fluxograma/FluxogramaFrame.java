@@ -120,7 +120,7 @@ class FluxogramaFrame extends JFrame {
     	return painelPrincipal;
     }
 
-    private void iniciaBarraMenus() {
+    private void iniciaBarraMenus() {	//cria barra de menus
         JMenuBar barraMenu = new JMenuBar();
 
         JMenu menuArquivo = new JMenu("Arquivo");
@@ -220,7 +220,7 @@ class FluxogramaFrame extends JFrame {
         this.setJMenuBar(barraMenu);
 	}
 
-	private void iniciaBarraFerramentas() {
+	private void iniciaBarraFerramentas() {		//inciaia barra de ferramentas
 		Border borda = new LineBorder(Color.BLACK, 1);
         grupoBotoesBarraFerramenta = new ButtonGroup();
         barraFerramentas = new JToolBar();

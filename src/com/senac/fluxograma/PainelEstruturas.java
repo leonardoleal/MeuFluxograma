@@ -55,7 +55,7 @@ public class PainelEstruturas extends JPanel {
 	public Fluxograma getFluxogramaSelecionado() {
 		return listaFluxogramas.getSelectedValue();
 	}
-
+		//adiciona fluxograma
 	public void addFluxograma(Fluxograma fluxograma) {
 		modelFluxograma = (DefaultListModel<Fluxograma>) listaFluxogramas.getModel();
 
@@ -67,18 +67,18 @@ public class PainelEstruturas extends JPanel {
 			modelFluxograma.set(indice, fluxograma);
 		}
     }
-
+		//edita fluxograma
 	public void editaFluxograma(Fluxograma fluxograma) {
 		int indice = modelFluxograma.indexOf(fluxograma);
 		modelFluxograma.set(indice, fluxograma);
     }
-
+		//remove fluxograma
     public void removeFluxograma(Fluxograma fluxograma) {
 		if (modelFluxograma.contains(fluxograma)) {
 	        modelFluxograma.removeElement(fluxograma);
 		}
 	}
-
+    	//limpar tudo
 	public void limpar() {
 		listaFluxogramas.removeAll();
 		modelFluxograma.clear();
