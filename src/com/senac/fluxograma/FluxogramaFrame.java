@@ -1,6 +1,8 @@
 package com.senac.fluxograma;
 
 import java.awt.Color;
+import java.awt.Component;
+import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
@@ -16,7 +18,10 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 
 import javax.imageio.ImageIO;
+import javax.swing.Box;
 import javax.swing.ButtonGroup;
+import javax.swing.Icon;
+import javax.swing.ImageIcon;
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -29,6 +34,8 @@ import javax.swing.JToggleButton;
 import javax.swing.JToolBar;
 import javax.swing.KeyStroke;
 import javax.swing.SwingUtilities;
+import javax.swing.border.Border;
+import javax.swing.border.LineBorder;
 
 import com.senac.fluxograma.FiltroSelecaoArquivo.tipoArquivo;
 import com.senac.fluxograma.elemento.ElementoFluxograma;
@@ -216,32 +223,60 @@ class FluxogramaFrame extends JFrame {
 	}
 
 	private void iniciaBarraFerramentas() {
+		Border borda = new LineBorder(Color.BLACK, 1);
         grupoBotoesBarraFerramenta = new ButtonGroup();
         barraFerramentas = new JToolBar();
         barraFerramentas.setFloatable(false);
         
-        botaoInicio = new JToggleButton("Inicio");
+        botaoInicio = new JToggleButton(new ImageIcon("static/botaoInicio.png"));
+        botaoInicio.setSelectedIcon(new ImageIcon("static/botaoInicioSelected.png"));
+        botaoInicio.setBorder(borda);
         botaoInicio.setSelected(true);
         grupoBotoesBarraFerramenta.add(botaoInicio);
         barraFerramentas.add(botaoInicio);
 
-        botaoFim = new JToggleButton("Fim");
+        // cria um espaço entre os botões
+        barraFerramentas.add(Box.createRigidArea(new Dimension(5,0)));
+
+        botaoFim = new JToggleButton(new ImageIcon("static/botaoFim.png"));
+        botaoFim.setSelectedIcon(new ImageIcon("static/botaoFimSelected.png"));
+        botaoFim.setBorder(borda);
         grupoBotoesBarraFerramenta.add(botaoFim);
         barraFerramentas.add(botaoFim);
 
-        botaoProcessamento = new JToggleButton("Processamento");
+        // cria um espaço entre os botões
+        barraFerramentas.add(Box.createRigidArea(new Dimension(5,0)));
+
+        botaoProcessamento = new JToggleButton(new ImageIcon("static/botaoProcessamento.png"));
+        botaoProcessamento.setSelectedIcon(new ImageIcon("static/botaoProcessamentoSelected.png"));
+        botaoProcessamento.setBorder(borda);
         grupoBotoesBarraFerramenta.add(botaoProcessamento);
         barraFerramentas.add(botaoProcessamento);
 
-        botaoDecisao = new JToggleButton("Decisao");
+        // cria um espaço entre os botões
+        barraFerramentas.add(Box.createRigidArea(new Dimension(5,0)));
+
+        botaoDecisao = new JToggleButton(new ImageIcon("static/botaoDecisao.png"));
+        botaoDecisao.setSelectedIcon(new ImageIcon("static/botaoDecisaoSelected.png"));
+        botaoDecisao.setBorder(borda);
         grupoBotoesBarraFerramenta.add(botaoDecisao);
         barraFerramentas.add(botaoDecisao);
 
-        botaoSubrotina = new JToggleButton("Subrotina");
+        // cria um espaço entre os botões
+        barraFerramentas.add(Box.createRigidArea(new Dimension(5,0)));
+
+        botaoSubrotina = new JToggleButton(new ImageIcon("static/botaoSubrotina.png"));
+        botaoSubrotina.setSelectedIcon(new ImageIcon("static/botaoSubrotinaSelected.png"));
+        botaoSubrotina.setBorder(borda);
         grupoBotoesBarraFerramenta.add(botaoSubrotina);
         barraFerramentas.add(botaoSubrotina);
 
-        botaoLinhaFluxo = new JToggleButton("LinhaFluxo");
+        // cria um espaço entre os botões
+        barraFerramentas.add(Box.createRigidArea(new Dimension(5,0)));
+
+        botaoLinhaFluxo = new JToggleButton(new ImageIcon("static/botaoLinhaFluxo.png"));
+        botaoLinhaFluxo.setSelectedIcon(new ImageIcon("static/botaoLinhaFluxoSelected.png"));
+        botaoLinhaFluxo.setBorder(borda);
         grupoBotoesBarraFerramenta.add(botaoLinhaFluxo);
         barraFerramentas.add(botaoLinhaFluxo);
 
