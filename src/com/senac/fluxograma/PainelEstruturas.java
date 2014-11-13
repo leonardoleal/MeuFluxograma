@@ -4,6 +4,8 @@ import java.awt.BorderLayout;
 import java.awt.Rectangle;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.util.Arrays;
+import java.util.List;
 
 import javax.swing.DefaultListModel;
 import javax.swing.JList;
@@ -46,8 +48,8 @@ public class PainelEstruturas extends JPanel {
 		this.add(listaScroller);
 	}
 
-	public Fluxograma[] getFluxogramas() {
-		return (Fluxograma[]) modelFluxograma.toArray();
+	public List<Object> getFluxogramas() {
+		return Arrays.asList(modelFluxograma.toArray());
 	}
 
 	public Fluxograma getFluxogramaSelecionado() {
@@ -59,6 +61,8 @@ public class PainelEstruturas extends JPanel {
 
 		if (!modelFluxograma.contains(fluxograma)) {
 	        modelFluxograma.addElement(fluxograma);
+	        listaFluxogramas.repaint();
+	        frame.getPainelPrincipal().setFluxograma(fluxograma);
 		} else {
 			int indice = modelFluxograma.indexOf(fluxograma);
 			modelFluxograma.set(indice, fluxograma);

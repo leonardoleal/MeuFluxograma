@@ -32,7 +32,7 @@ import javax.swing.SwingUtilities;
 
 import com.senac.fluxograma.FiltroSelecaoArquivo.tipoArquivo;
 import com.senac.fluxograma.elemento.ElementoFluxograma;
-import com.senac.fluxograma.elemento.Figura;
+import com.senac.fluxograma.elemento.Fluxograma;
 import com.senac.fluxograma.elemento.InicioFim;
 import com.senac.fluxograma.elemento.Subrotina;
 
@@ -351,7 +351,7 @@ class FluxogramaFrame extends JFrame {
 				arquivoDialog.setCurrentDirectory(localDefault);
 				arquivoDialog.setSelectedFile(new File(getTitle()));
 
-				try {
+				try { // exportar p/ imagem
 			        if (e.getSource().equals(menuItemExportar)) {
 			        	arquivoDialog.setDialogTitle("Exportar p/Imagem");
 				        arquivoDialog.setFileFilter(new FiltroSelecaoArquivo(tipoArquivo.IMAGEM));
@@ -392,11 +392,11 @@ class FluxogramaFrame extends JFrame {
 								ObjectInputStream ois = new ObjectInputStream(fis);
 
 								painelPrincipal.limpar();
-								Figura figura = (Figura) ois.readObject();
+								Fluxograma fluxo = (Fluxograma) ois.readObject();
 
-								while(figura != null) {
-					                painelPrincipal.adicionaFigura(figura);
-					                figura = (Figura) ois.readObject();
+								while(fluxo != null) {
+					                painelEstruturas.addFluxograma(fluxo);
+					                fluxo = (Fluxograma) ois.readObject();
 								}
 
 								ois.close();
@@ -408,7 +408,8 @@ class FluxogramaFrame extends JFrame {
 					        if (acao == JFileChooser.APPROVE_OPTION) {
 					        	//remove a selecao
 								painelPrincipal.limpaSelecao();
-					            //extensao default
+					  
+								//extensao default
 					        	File arquivo = new File(arquivoDialog.getSelectedFile().getAbsolutePath());
 					        	if (!arquivo.getName().endsWith("flux")) {
 					        		arquivo = new File(arquivo.getAbsolutePath() + ".flux");
@@ -416,8 +417,8 @@ class FluxogramaFrame extends JFrame {
 								FileOutputStream fis = new FileOutputStream(arquivo);
 								ObjectOutputStream oos = new ObjectOutputStream(fis);
 
-								for (Figura figura : painelPrincipal.getDesenhos()) {
-									oos.writeObject(figura);
+								for (Object fluxo : painelEstruturas.getFluxogramas()) {
+									oos.writeObject(fluxo);
 								}
 
 								oos.close();
@@ -430,6 +431,7 @@ class FluxogramaFrame extends JFrame {
 					FluxogramaFrame.this.mensagemEstado("Arquivo carregado com sucesso.");
 					FluxogramaFrame.this.setTitle(arquivoDialog.getSelectedFile().getName());
 				} catch (Exception e1) {
+					e1.printStackTrace();
 					FluxogramaFrame.this.mensagemEstado("Erro na manipulação de arquivo.");
 				}
 			} else if (e.getSource().equals(menuItemNovo)) {

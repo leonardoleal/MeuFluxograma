@@ -44,6 +44,7 @@ public class PainelPrincipal extends JPanel {
 	}
 
     public void setFluxograma(Fluxograma fluxograma) {
+		limpaSelecao();
 		this.fluxograma = fluxograma;
 		repaint();
 	}

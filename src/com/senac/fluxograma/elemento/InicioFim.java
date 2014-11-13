@@ -55,10 +55,17 @@ public class InicioFim extends ElementoFluxograma {
 
 	@Override
 	public boolean equals(Object o) {
+		if (o == null) return false;
+
 		try {
 			return this.getTipo().equals(((InicioFim) o).getTipo());
 		} catch (ClassCastException cCE) {
 			return false;
 		}
+	}
+
+	@Override
+	public int hashCode() {
+		return super.hashCode();
 	}
 }
