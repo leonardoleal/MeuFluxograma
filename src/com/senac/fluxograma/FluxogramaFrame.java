@@ -39,8 +39,8 @@ import com.senac.fluxograma.elemento.Subrotina;
 class FluxogramaFrame extends JFrame {
 	private static final long serialVersionUID = 1L;
 
-	private JMenuItem menuItemNovo, menuItemAbrir, menuItemSalvar, menuItemExportar, menuItemSair;
-	private JMenuItem menuItemLimpar, menuItemTexto, menuItemRemover;
+	private JMenuItem menuItemNovo, menuItemAbrir, menuItemSalvar, menuItemExportarFluxo, menuItemExportarProjeto;
+	private JMenuItem menuItemLimpar, menuItemTexto, menuItemRemover, menuItemSair;
 	private JMenuItem popupMenuItemLimpar, popupMenuItemTexto, popupMenuItemRemover;
 	private JToolBar barraFerramentas;
 	private ButtonGroup grupoBotoesBarraFerramenta;
@@ -147,13 +147,18 @@ class FluxogramaFrame extends JFrame {
         menuItemSalvar.addActionListener(tratadorMenus);
         menuArquivo.add(menuItemSalvar);
 
-        menuItemExportar = new JMenuItem("Exportar p/Imagem");
-        menuItemExportar.setMnemonic(KeyEvent.VK_X);
-        menuItemExportar.setAccelerator(
+        menuItemExportarFluxo = new JMenuItem("Exportar p/Imagem");
+        menuItemExportarFluxo.setMnemonic(KeyEvent.VK_X);
+        menuItemExportarFluxo.setAccelerator(
 				KeyStroke.getKeyStroke(KeyEvent.VK_X, ActionEvent.CTRL_MASK)
         );
-        menuItemExportar.addActionListener(tratadorMenus);
-        menuArquivo.add(menuItemExportar);
+        menuItemExportarFluxo.addActionListener(tratadorMenus);
+        menuArquivo.add(menuItemExportarFluxo);
+
+        menuItemExportarProjeto = new JMenuItem("Exportar Projeto p/Imagem");
+        menuItemExportarProjeto.setMnemonic(KeyEvent.VK_I);
+        menuItemExportarProjeto.addActionListener(tratadorMenus);
+        menuArquivo.add(menuItemExportarProjeto);
 
         menuArquivo.addSeparator();
 
@@ -343,7 +348,8 @@ class FluxogramaFrame extends JFrame {
 	    public void actionPerformed(ActionEvent e) {
 			if (e.getSource().equals(menuItemAbrir)
 					|| e.getSource().equals(menuItemSalvar)
-					|| e.getSource().equals(menuItemExportar)
+					|| e.getSource().equals(menuItemExportarFluxo)
+					|| e.getSource().equals(menuItemExportarProjeto)
 			) {
 				JFileChooser arquivoDialog = new JFileChooser();
 				arquivoDialog.setFileSelectionMode(JFileChooser.FILES_ONLY);
@@ -352,7 +358,9 @@ class FluxogramaFrame extends JFrame {
 				arquivoDialog.setSelectedFile(new File(getTitle()));
 
 				try { // exportar p/ imagem
-			        if (e.getSource().equals(menuItemExportar)) {
+			        if (e.getSource().equals(menuItemExportarFluxo)
+							|| e.getSource().equals(menuItemExportarProjeto)
+					) {
 			        	arquivoDialog.setDialogTitle("Exportar p/Imagem");
 				        arquivoDialog.setFileFilter(new FiltroSelecaoArquivo(tipoArquivo.IMAGEM));
 
@@ -361,7 +369,8 @@ class FluxogramaFrame extends JFrame {
 				        if (acao == JFileChooser.APPROVE_OPTION) {
 				        	//remove a selecao
 							painelPrincipal.limpaSelecao();
-				            //extensao default
+
+							//extensao default
 				        	File arquivo = new File(arquivoDialog.getSelectedFile().getAbsolutePath());
 				        	if (!arquivo.getName().endsWith("png")) {
 				        		arquivo = new File(arquivo.getAbsolutePath() + ".png");
@@ -371,15 +380,36 @@ class FluxogramaFrame extends JFrame {
 									painelPrincipal.getSize().width,
 									painelPrincipal.getSize().height,
 									BufferedImage.TYPE_INT_ARGB
-							); 
-							Graphics g = bi.createGraphics();
-							painelPrincipal.paint(g);
-							g.dispose();
+							);
 
 							try{
-								ImageIO.write(bi,"png",arquivo);
+								Graphics g = bi.createGraphics();
+
+								// exporta todos os fluxos p/ imagem
+								if (e.getSource().equals(menuItemExportarProjeto)) {
+									int i = 0;
+									String nomeArquivo = arquivo.getName().split("\\.")[0];
+									for (Object fluxo : painelEstruturas.getFluxogramas()) {
+										painelPrincipal.setFluxograma((Fluxograma) fluxo);
+										painelPrincipal.paint(g);
+										ImageIO.write(bi,"png", arquivo);
+
+										i++;
+						        		arquivo = new File(
+						        				arquivo.getParentFile() + File.separator +
+						        				nomeArquivo + i + ".png"
+						        		);
+									}
+								} else { // exporta somente o fluxo aberto
+									painelPrincipal.paint(g);
+									ImageIO.write(bi,"png",arquivo);
+								}
+
+								g.dispose();
 								FluxogramaFrame.this.mensagemEstado("Arquivo exportado com sucesso! ("+arquivo.getName()+")");
-							} catch (Exception eI) {}
+							} catch (Exception eI) {
+								FluxogramaFrame.this.mensagemEstado("Falha ao exportar para imagem!");
+							}
 				        }
 					} else { // Abrir e Salvar
 				        arquivoDialog.setFileFilter(new FiltroSelecaoArquivo(tipoArquivo.DOCUMENTO));
